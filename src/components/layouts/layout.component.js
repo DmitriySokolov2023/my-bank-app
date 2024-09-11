@@ -2,7 +2,6 @@ export class Layout {
 	constructor({ router, children }) {
 		this.children = children
 		this.router = router
-		console.log(children)
 	}
 	render() {
 		const headerHTML = `<header>

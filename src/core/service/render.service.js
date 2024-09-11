@@ -6,16 +6,19 @@ class RenderService {
 		template.innerHTML = html.trim()
 		const element = template.content.firstChild
 
-		// this.#replaceComponentTags(element, components)
+		if (styles) {
+			this.#applyModuleStyles(styles, element)
+		}
+		this.#replaceComponentTags(element, components)
 
 		return element
 	}
 
 	#replaceComponentTags(parentElement, components) {
 		const componentTagPattern = /^component-/
-		const allElement = parentElement.getElementByTagName('*')
+		const allElement = parentElement.getElementsByTagName('*')
 
-		for (element of allElement) {
+		for (const element of allElement) {
 			const elementTagName = element.tagName.toLowerCase()
 			if (componentTagPattern.test(elementTagName)) {
 				const componentName = elementTagName
@@ -42,7 +45,24 @@ class RenderService {
 		}
 	}
 
-	#applyModuleStyles() {}
+	#applyModuleStyles(moduleStyles, element) {
+		if (!element) return
+
+		const applyStyles = element => {
+			for (const [key, value] of Object.entries(moduleStyles)) {
+				if (element.classList.contains(key)) {
+					element.classList.remove(key)
+					element.classList.add(value)
+				}
+			}
+		}
+
+		if (element.getAttribute('class')) {
+			applyStyles(element)
+		}
+		const elements = element.querySelectorAll('*')
+		elements.forEach(applyStyles)
+	}
 }
 
 export default new RenderService()
