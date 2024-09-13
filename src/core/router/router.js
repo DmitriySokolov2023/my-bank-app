@@ -1,4 +1,4 @@
-import { Layout } from '@/components/layouts/layout.component'
+import { Layout } from '@/components/layout/layout.component'
 import { NotFound } from '@/components/screens/not-found/not-found.component'
 
 import { ROUTES } from './routes.data'
@@ -58,8 +58,8 @@ export class Router {
 			this.#layout = new Layout({
 				router: this,
 				children: component.render()
-			})
-			document.getElementById('app').innerHTML = this.#layout.render()
+			}).render()
+			$R('#app').append(this.#layout)
 		} else {
 			document.querySelector('main').innerHTML = component.render()
 		}

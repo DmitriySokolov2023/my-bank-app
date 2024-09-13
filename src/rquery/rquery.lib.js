@@ -1,7 +1,7 @@
 class RQuery {
 	constructor(selector) {
 		if (typeof selector === 'string') {
-			this.element = document.querySelector(this.selector)
+			this.element = document.querySelector(selector)
 			if (!this.element) {
 				throw new Error('Not found')
 			}
@@ -16,6 +16,16 @@ class RQuery {
 		} else {
 			throw new Error(`Element not found!`)
 		}
+	}
+	append(childElement) {
+		this.element.appendChild(childElement)
+		return this
+	}
+	before(newElement) {
+		if (!(newElement instanceof HTMLElement)) {
+			throw new Error('Element must be an HTMLElement')
+		}
+		this.element.parentElement.insertBefore(newElement, this.element)
 	}
 	css(property, value) {
 		if (typeof property != 'string' || typeof value != 'string') {
