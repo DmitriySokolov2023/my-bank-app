@@ -62,8 +62,7 @@ export class Router {
 			}).render()
 			$R('#app').append(this.#layout)
 		} else {
-			$R('main').append(component.render())
-			// document.querySelector('main').innerHTML = component.render()
+			$R('#content').html('').append(component.render())
 		}
 	}
 }

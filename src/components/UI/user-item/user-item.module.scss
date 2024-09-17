@@ -1,0 +1,13 @@
+@import 'src/styles/mixins';
+
+.user-item {
+	@include flex-horizontal-center;
+	gap: 10px;
+}
+.user_img {
+	width: 40px;
+	height: 40px;
+	background-color: gray;
+}
+.user_text {
+}

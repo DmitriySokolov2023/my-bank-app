@@ -19,13 +19,21 @@ class RQuery {
 	}
 	append(childElement) {
 		this.element.appendChild(childElement)
-		return this.element
+		return this
 	}
 	before(newElement) {
 		if (!(newElement instanceof HTMLElement)) {
 			throw new Error('Element must be an HTMLElement')
 		}
 		this.element.parentElement.insertBefore(newElement, this.element)
+	}
+	html(htmlContent) {
+		if (typeof htmlContent === 'undefined') {
+			return this.element.innerHTML
+		} else {
+			this.element.innerHTML = htmlContent
+			return this
+		}
 	}
 	css(property, value) {
 		if (typeof property != 'string' || typeof value != 'string') {
