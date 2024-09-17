@@ -19,7 +19,7 @@ class RQuery {
 	}
 	append(childElement) {
 		this.element.appendChild(childElement)
-		return this
+		return this.element
 	}
 	before(newElement) {
 		if (!(newElement instanceof HTMLElement)) {

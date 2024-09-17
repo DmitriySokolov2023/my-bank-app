@@ -2,6 +2,7 @@ import { Layout } from '@/components/layout/layout.component'
 import { NotFound } from '@/components/screens/not-found/not-found.component'
 
 import { ROUTES } from './routes.data'
+import { $R } from '@/rquery/rquery.lib'
 
 export class Router {
 	#routes = ROUTES
@@ -57,11 +58,12 @@ export class Router {
 		if (!this.#layout) {
 			this.#layout = new Layout({
 				router: this,
-				children: component.render()
+				children: component
 			}).render()
 			$R('#app').append(this.#layout)
 		} else {
-			document.querySelector('main').innerHTML = component.render()
+			$R('main').append(component.render())
+			// document.querySelector('main').innerHTML = component.render()
 		}
 	}
 }
