@@ -35,11 +35,119 @@ class RQuery {
 			return this
 		}
 	}
+	text(text) {
+		if (typeof text === 'undefined') {
+			return this.element.innerHTML
+		} else {
+			this.element.innerHTML = text
+			return this
+		}
+	}
 	css(property, value) {
 		if (typeof property != 'string' || typeof value != 'string') {
 			throw new Error('!Srting')
 		}
 		this.element.style[property] = value
+		return this
+	}
+
+	click(callBack) {
+		this.element.addEventListener('click', callBack)
+		return this
+	}
+
+	addClass(classNames) {
+		if (Array.isArray(classNames)) {
+			for (const className of classNames) {
+				this.element.classList.add(className)
+			}
+		} else {
+			this.element.classList.add(classNames)
+		}
+
+		return this
+	}
+
+	removeClass(classNames) {
+		if (Array.isArray(classNames)) {
+			for (const className of classNames) {
+				this.element.classList.remove(className)
+			}
+		} else {
+			this.element.classList.remove(classNames)
+		}
+
+		return this
+	}
+
+	attr(attributeName, value) {
+		if (typeof attributeName !== 'string') {
+			throw new Error('Attribute name must be a string')
+		}
+
+		if (typeof value === 'undefined') {
+			return this.element.getAttribute(attributeName)
+		} else {
+			this.element.setAttribute(attributeName, value)
+			return this
+		}
+	}
+
+	input({ onInput, ...rest }) {
+		if (this.element.tagName.toLowerCase() !== 'input')
+			throw new Error('Element must be an input')
+
+		for (const [key, value] of Object.entries(rest)) {
+			this.element.setAttribute(key, value)
+		}
+
+		if (onInput) {
+			this.element.addEventListener('input', onInput)
+		}
+
+		return this
+	}
+
+	/**
+	 * Set attributes and event listeners for a number input element.
+	 * @param {number} [limit] - The maximum length of input value.
+	 * @returns {RQuery} The current RQuery instance for chaining.
+	 */
+	numberInput(limit) {
+		if (
+			this.element.tagName.toLowerCase() !== 'input' ||
+			this.element.type !== 'number'
+		)
+			throw new Error('Element must be an input with type "number"')
+
+		this.element.addEventListener('input', event => {
+			let value = event.target.value.replace(/[^0-9]/g, '')
+			if (limit) value = value.substring(0, limit)
+			event.target.value = value
+		})
+
+		return this
+	}
+
+	/**
+	 * Set attributes and event listeners for a credit card input element.
+	 * @returns {RQuery} The current RQuery instance for chaining.
+	 */
+	creditCardInput() {
+		const limit = 16
+
+		if (
+			this.element.tagName.toLowerCase() !== 'input' ||
+			this.element.type !== 'text'
+		)
+			throw new Error('Element must be an input with type "text"')
+
+		this.element.addEventListener('input', event => {
+			let value = event.target.value.replace(/[^0-9]/g, '')
+			if (limit) value = value.substring(0, limit)
+			event.target.value = formatCardNumberWithDashes(value)
+		})
+
 		return this
 	}
 }
