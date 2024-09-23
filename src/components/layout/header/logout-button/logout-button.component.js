@@ -4,10 +4,12 @@ import renderService from '@/core/service/render.service'
 import styles from './logout-button.module.scss'
 import template from './logout-button.template.html'
 
+import { $R } from '@/rquery/rquery.lib'
+
 export class LogoutButton extends ChildComponent {
 	constructor({ router }) {
 		super()
-
+		console.log(router.getCurrentPath())
 		this.router = router
 	}
 	render() {

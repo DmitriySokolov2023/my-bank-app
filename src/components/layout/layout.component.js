@@ -1,4 +1,5 @@
 import ChildComponent from '@/core/component/child.component'
+import { NotificationService } from '@/core/service/notification.service'
 import renderService from '@/core/service/render.service'
 
 import styles from './layout.module.scss'
@@ -25,6 +26,11 @@ export class Layout extends ChildComponent {
 				router: this.router
 			}).render()
 		)
+
+		new NotificationService({
+			title: 'alert3453',
+			element: this.element
+		}).popup()
 
 		return this.element
 	}
