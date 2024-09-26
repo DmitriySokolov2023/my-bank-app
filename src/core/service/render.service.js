@@ -15,7 +15,6 @@ class RenderService {
 	}
 
 	#replaceComponentTags(parentElement, components) {
-		console.log(components)
 		const componentTagPattern = /^component-/
 		const allElement = parentElement.getElementsByTagName('*')
 

@@ -1,4 +1,5 @@
 import { BaseScreen } from '@/core/component/base-screen'
+import { FormService } from '@/core/service/form.service'
 import renderService from '@/core/service/render.service'
 
 import { Button } from '@/components/UI/button/button.component'
@@ -26,7 +27,7 @@ export class Auth extends BaseScreen {
 	}
 
 	#handleSubmit = event => {
-		console.log(event.target)
+		new FormService(event.target).getFormDataInputs()
 	}
 	constructor() {
 		super('Auth')

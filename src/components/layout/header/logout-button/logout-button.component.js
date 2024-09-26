@@ -9,7 +9,6 @@ import { $R } from '@/rquery/rquery.lib'
 export class LogoutButton extends ChildComponent {
 	constructor({ router }) {
 		super()
-		console.log(router.getCurrentPath())
 		this.router = router
 	}
 	render() {
