@@ -1,11 +1,11 @@
 import ChildComponent from '@/core/component/child.component'
-import { NotificationService } from '@/core/service/notification.service'
 import renderService from '@/core/service/render.service'
 
 import styles from './layout.module.scss'
 import template from './layout.template.html'
 
 import { Header } from './header/header.component'
+import { Notification } from './notification/notification.component'
 import { $R } from '@/rquery/rquery.lib'
 
 export class Layout extends ChildComponent {
@@ -15,7 +15,7 @@ export class Layout extends ChildComponent {
 		this.children = children.render()
 	}
 	render() {
-		this.element = renderService.htmlToElement(template, [], styles)
+		this.element = renderService.htmlToElement(template, [Notification], styles)
 
 		const mainElement = $R(this.element).find('main')
 
@@ -26,11 +26,6 @@ export class Layout extends ChildComponent {
 				router: this.router
 			}).render()
 		)
-
-		new NotificationService({
-			title: 'alert3453',
-			element: this.element
-		}).popup()
 
 		return this.element
 	}
