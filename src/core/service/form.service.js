@@ -3,12 +3,16 @@ import { $R } from '@/rquery/rquery.lib'
 export class FormService {
 	constructor(form) {
 		this.form = form
-		console.log(form)
+		this.data = {}
 	}
 
 	getFormDataInputs() {
 		if (this.form.tagName.toLowerCase() === 'form') {
-			console.log($R(this.form).find('label').element)
+			for (let node of $R(this.form).find('#auth-inputs').element.childNodes) {
+				const input = $R(node).find('input').element
+				this.data[input.name] = input.value
+			}
+			return this.data
 		} else {
 			throw new Error('Element must be a form')
 		}

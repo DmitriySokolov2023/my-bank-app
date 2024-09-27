@@ -1,6 +1,7 @@
 import { BaseScreen } from '@/core/component/base-screen'
 import { FormService } from '@/core/service/form.service'
 import renderService from '@/core/service/render.service'
+import validationService from '@/core/service/validation.service'
 
 import { Button } from '@/components/UI/button/button.component'
 import { Field } from '@/components/UI/field/field.component'
@@ -26,8 +27,24 @@ export class Auth extends BaseScreen {
 		e.target.innerText = this.#isTypeLogin ? 'Sign in' : 'Register'
 	}
 
+	#validateFields(formValues) {
+		const emailLabel = $R(this.element).find('label:first-child')
+		const passwordLabel = $R(this.element).find('label:last-child')
+
+		if (!formValues.email) {
+			validationService.showError(emailLabel)
+		}
+		if (!formValues.password) {
+			validationService.showError(passwordLabel)
+		}
+		return formValues.email && formValues.password
+	}
+
 	#handleSubmit = event => {
-		new FormService(event.target).getFormDataInputs()
+		const formValues = new FormService(event.target).getFormDataInputs()
+		if (!this.#validateFields(formValues)) return
+
+		this.authService.main(this.#isTypeLogin ? 'register' : 'login', formValues)
 	}
 	constructor() {
 		super('Auth')
@@ -69,6 +86,7 @@ export class Auth extends BaseScreen {
 			.click(this.#changeFormType.bind(this))
 
 		$R(this.element).find('form').submit(this.#handleSubmit)
+
 		return this.element
 	}
 }

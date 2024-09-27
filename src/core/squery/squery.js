@@ -1,5 +1,6 @@
 import { SERVER_URL } from '@/config/url.config'
 
+import { ACCESS_TOKEN_KEY } from '../constants/auth.constants'
 import { NotificationService } from '../service/notification.service'
 import { StorageService } from '../service/storage.service'
 
@@ -62,12 +63,12 @@ export async function sQuery({
 				onError(errorMessage)
 			}
 
-			new NotificationService('error', errorMessage)
+			new NotificationService().show('error', errorMessage)
 		}
 	} catch (errorData) {
 		const errorMessage = extractErrorMessage(errorData)
 		if (errorMessage) {
-			onError(errorMessage)
+			throw new Error('Error', errorMessage)
 		}
 	} finally {
 		isLoading = false

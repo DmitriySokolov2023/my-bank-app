@@ -13,4 +13,7 @@
 	&:focus-within {
 		border-color: rgba($primary, 0.5);
 	}
+	> input:invalid {
+		border-color: rgba(red, 0.5);
+	}
 }
