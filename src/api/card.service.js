@@ -1,5 +1,6 @@
-import { NotificationService } from '@/core/service/notification.service'
-import { sQuery } from '@/core/squery/squery'
+import { redQuery } from '@/core/red-query/red-query.lib'
+import { NotificationService } from '@/core/services/notification.service'
+import { Store } from '@/core/store/store'
 
 export class CardService {
 	#BASE_URL = '/cards'
@@ -10,29 +11,28 @@ export class CardService {
 	}
 
 	byUser(onSuccess) {
-		return sQuery({
+		return redQuery({
 			path: `${this.#BASE_URL}/by-user`,
-			method: 'GET',
 			onSuccess
 		})
 	}
 
-	create() {
-		return sQuery({
-			path: this.#BASE_URL,
-			method: 'POST'
-		})
-	}
-
+	/**
+	 * Updates the user's balance with the specified amount and type.
+	 *
+	 * @param {number} amount - The amount to be added or withdrawn from the user's balance.
+	 * @param {'top-up' | 'withdrawal'} type - The type of the transaction, either "top-up" or "withdrawal".
+	 * @param {function} onSuccess - The callback function to be executed when the balance update is successful.
+	 * @returns {Promise} A Promise object that resolves to the response from the API.
+	 */
 	updateBalance(amount, type, onSuccess) {
-		return sQuery({
+		return redQuery({
 			path: `${this.#BASE_URL}/balance/${type}`,
 			method: 'PATCH',
 			body: { amount: +amount },
 			onSuccess: () => {
 				this.notificationService.show(
 					'success',
-
 					'Balance successfully changed!'
 				)
 				onSuccess()
@@ -40,8 +40,18 @@ export class CardService {
 		})
 	}
 
+	/**
+	 * Transfers money between two card numbers.
+	 *
+	 * @function
+	 * @param {Object} body - The transfer details.
+	 * @param {number} body.amount - The amount to be transferred.
+	 * @param {string} body.toCardNumber - The recipient's card number.
+	 * @param {Function} onSuccess - The callback function to be executed upon successful transfer.
+	 * @returns {Promise} A promise that resolves with the redQuery response.
+	 */
 	transfer({ amount, toCardNumber }, onSuccess) {
-		return sQuery({
+		return redQuery({
 			path: `${this.#BASE_URL}/transfer-money`,
 			method: 'PATCH',
 			body: {
@@ -52,8 +62,7 @@ export class CardService {
 			onSuccess: () => {
 				this.notificationService.show(
 					'success',
-
-					'Balance successfully changed!'
+					'Transfer successfully completed!'
 				)
 				onSuccess()
 			}

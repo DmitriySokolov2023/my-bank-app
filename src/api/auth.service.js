@@ -1,5 +1,5 @@
-import { NotificationService } from '@/core/service/notification.service'
-import { sQuery } from '@/core/squery/squery'
+import { redQuery } from '@/core/red-query/red-query.lib'
+import { NotificationService } from '@/core/services/notification.service'
 import { Store } from '@/core/store/store'
 
 export class AuthService {
@@ -11,14 +11,17 @@ export class AuthService {
 	}
 
 	main(type, body) {
-		return sQuery({
+		return redQuery({
 			path: `${this.#BASE_URL}/${type}`,
 			body,
-			method: 'POST',
 			onSuccess: data => {
 				this.store.login(data.user, data.accessToken)
-				this.notificationService.show('success', 'You login')
-			}
+				this.notificationService.show(
+					'success',
+					'You have successfully logged in!'
+				)
+			},
+			method: 'POST'
 		})
 	}
 }

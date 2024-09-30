@@ -1,7 +1,9 @@
 import ChildComponent from '@/core/component/child.component'
-import renderService from '@/core/service/render.service'
+import { $R } from '@/core/rquery/rquery.lib'
+import renderService from '@/core/services/render.service'
+import { Store } from '@/core/store/store'
 
-import { UserItem } from '@/components/UI/user-item/user-item.component'
+import { UserItem } from '@/components/ui/user-item/user-item.component'
 
 import styles from './header.module.scss'
 import template from './header.template.html'
@@ -14,34 +16,48 @@ export class Header extends ChildComponent {
 	constructor({ router }) {
 		super()
 
+		this.store = Store.getInstance()
+		this.store.addObserver(this)
+
 		this.router = router
+
+		this.userItem = new UserItem({
+			avatarPath:
+				'https://avatars.mds.yandex.net/i?id=6cca0de5884e51152f929e020731af786663b85f-11401793-images-thumbs&n=13',
+			name: 'Dmitriy'
+		})
 	}
+
+	update() {
+		this.user = this.store.state.user
+
+		const authSideElement = $R(this.element).find('#auth-side')
+
+		if (this.user) {
+			authSideElement.show()
+			this.userItem.update(this.user)
+			this.router.navigate('/')
+		} else {
+			authSideElement.hide()
+		}
+	}
+
 	render() {
 		this.element = renderService.htmlToElement(
 			template,
 			[
-				new UserItem({
-					name: 'Dmitriy',
-					avatarPath:
-						'https://avatars.mds.yandex.net/i?id=6cca0de5884e51152f929e020731af786663b85f-11401793-images-thumbs&n=13'
-				}),
 				Logo,
-				Search,
 				new LogoutButton({
 					router: this.router
-				})
+				}),
+				Search,
+				this.userItem
 			],
 			styles
 		)
-		// $R(this.element)
-		// 	.find('header')
-		// 	.append(
-		// 		new UserItem({
-		// 			name: 'Dmitriy',
-		// 			avatarPath:
-		// 				'https://avatars.mds.yandex.net/i?id=b9f61175e689c320cd0ca6a78f09bd6bd7820393-12714516-images-thumbs&n=13'
-		// 		}).render()
-		// 	)
+
+		this.update()
+
 		return this.element
 	}
 }

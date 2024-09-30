@@ -1,5 +1,5 @@
-const SITE_NAME = 'DM Bank'
+const SITE_NAME = 'RED Bank - Vanilla JS'
 
 export const getTitle = title => {
-	return title ? `${SITE_NAME} | ${title}` : 'Pure JS'
+	return title ? `${title} | ${SITE_NAME}` : SITE_NAME
 }

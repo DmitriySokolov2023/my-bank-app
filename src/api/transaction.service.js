@@ -1,11 +1,15 @@
-import { sQuery } from '@/core/squery/squery'
+import { redQuery } from '@/core/red-query/red-query.lib'
 
-export class StatisticsService {
+export class TransactionService {
 	#BASE_URL = '/transactions'
 
 	getAll(onSuccess) {
-		return sQuery({
-			path: this.#BASE_URL + `?${new URLSearchParams({ orderBy: 'desc' })}`,
+		return redQuery({
+			path:
+				this.#BASE_URL +
+				`?${new URLSearchParams({
+					orderBy: 'desc'
+				})}`,
 			onSuccess
 		})
 	}

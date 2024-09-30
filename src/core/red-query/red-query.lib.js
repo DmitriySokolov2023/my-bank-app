@@ -1,10 +1,10 @@
 import { SERVER_URL } from '@/config/url.config'
 
-import { ACCESS_TOKEN_KEY } from '../constants/auth.constants'
-import { NotificationService } from '../service/notification.service'
-import { StorageService } from '../service/storage.service'
+import { NotificationService } from '../services/notification.service'
+import { StorageService } from '../services/storage.service'
 
 import { extractErrorMessage } from './extract-error-message'
+import { ACCESS_TOKEN_KEY } from '@/constants/auth.constants'
 
 /**
  * RedQuery is a minimalistic library for handling API requests.
@@ -19,25 +19,27 @@ import { extractErrorMessage } from './extract-error-message'
  * @param {Function} [options.onError=null] - Callback function to be called on error response.
  * @returns {Promise<{isLoading: boolean, error: string|null, data: any|null}>} - An object containing the loading state, error, and data from the response.
  */
-
-export async function sQuery({
+export async function redQuery({
 	path,
 	body = null,
 	headers = {},
-	onSuccess = null,
+	method = 'GET',
 	onError = null,
-	method = 'GET'
+	onSuccess = null
 }) {
-	let isLoading = true
-	let error = null
-	let data = null
+	let isLoading = true,
+		error = null,
+		data = null
 	const url = `${SERVER_URL}/api${path}`
 
 	const accessToken = new StorageService().getItem(ACCESS_TOKEN_KEY)
 
 	const requestOptions = {
 		method,
-		headers: { 'Content-Type': 'application/json', ...headers }
+		headers: {
+			'Content-Type': 'application/json',
+			...headers
+		}
 	}
 
 	if (accessToken) {
@@ -50,8 +52,10 @@ export async function sQuery({
 
 	try {
 		const response = await fetch(url, requestOptions)
+
 		if (response.ok) {
 			data = await response.json()
+
 			if (onSuccess) {
 				onSuccess(data)
 			}
@@ -67,11 +71,13 @@ export async function sQuery({
 		}
 	} catch (errorData) {
 		const errorMessage = extractErrorMessage(errorData)
+
 		if (errorMessage) {
-			throw new Error('Error', errorMessage)
+			onError(errorMessage)
 		}
 	} finally {
 		isLoading = false
 	}
+
 	return { isLoading, error, data }
 }

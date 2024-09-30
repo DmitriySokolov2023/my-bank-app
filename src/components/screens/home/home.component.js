@@ -1,29 +1,18 @@
-import { BaseScreen } from '@/core/component/base-screen'
-import renderService from '@/core/service/render.service'
-
-import { Button } from '@/components/UI/button/button.component'
-import { Heading } from '@/components/UI/heading/heading.component'
+import { BaseScreen } from '@/core/component/base-screen.component'
+import renderService from '@/core/services/render.service'
 
 import styles from './home.module.scss'
 import template from './home.template.html'
 
+import { CardInfo } from './card-info/card-info.component'
+
 export class Home extends BaseScreen {
 	constructor() {
-		super('Home')
+		super({ title: 'Home' })
 	}
+
 	render() {
-		const element = renderService.htmlToElement(
-			template,
-			[
-				new Button({
-					children: 'Fetch',
-					variant: 'green',
-					onClick: () => alert()
-				}),
-				new Heading('Home')
-			],
-			styles
-		)
+		const element = renderService.htmlToElement(template, [CardInfo], styles)
 
 		return element
 	}
