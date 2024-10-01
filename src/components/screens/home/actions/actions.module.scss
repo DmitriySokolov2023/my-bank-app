@@ -1,0 +1,11 @@
+@import 'src/styles/_mixins.scss';
+.actions {
+	@include dashboard-section;
+	&-buttons {
+		display: flex;
+		gap: 15px;
+		> button {
+			width: 100%;
+		}
+	}
+}
