@@ -6,6 +6,9 @@ import template from './home.template.html'
 
 import { Actions } from './actions/actions.component'
 import { CardInfo } from './card-info/card-info.component'
+import { Contacts } from './contacts/contacts.component'
+import { Statistics } from './statistics/statistics.component'
+import { Transactions } from './transactions/transactions.component'
 
 export class Home extends BaseScreen {
 	constructor() {
@@ -15,7 +18,7 @@ export class Home extends BaseScreen {
 	render() {
 		const element = renderService.htmlToElement(
 			template,
-			[CardInfo, Actions],
+			[CardInfo, Actions, Contacts, Transactions, Statistics],
 			styles
 		)
 

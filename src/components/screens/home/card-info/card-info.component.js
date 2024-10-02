@@ -11,6 +11,8 @@ import { CardService } from '@/api/card.service'
 import styles from './card-info.module.scss'
 import template from './card-info.template.html'
 
+import { BALANCE_UPDATE } from '@/constants/event.constants'
+
 export class CardInfo extends ChildComponent {
 	CODE = '*****'
 	constructor() {
@@ -18,8 +20,23 @@ export class CardInfo extends ChildComponent {
 		this.store = Store.getInstance()
 		this.cardService = new CardService()
 		this.element = renderService.htmlToElement(template, [], styles)
+		this.#addListener()
 	}
 
+	#addListener() {
+		document.addEventListener(BALANCE_UPDATE, this.#onBalanceUpdated)
+	}
+	#removeListener() {
+		document.removeEventListener(BALANCE_UPDATE, this.#onBalanceUpdated)
+	}
+
+	#onBalanceUpdated = () => {
+		this.fetchData()
+	}
+
+	destroy() {
+		this.#removeListener()
+	}
 	#copyCardNumber(e) {
 		navigator.clipboard.writeText(e.target.innerText).then(() => {
 			e.target.innerText = 'Card number copied'
@@ -54,7 +71,7 @@ export class CardInfo extends ChildComponent {
 		$R(this.element).find('#card-expire-date').text(this.card.expireDate)
 
 		const cardCvcElement = $R(this.element).find('#card-cvc')
-		console.log(cardCvcElement)
+
 		cardCvcElement.text(this.CODE).css('width', '44px')
 
 		$R(this.element)
@@ -70,7 +87,6 @@ export class CardInfo extends ChildComponent {
 		this.cardService.byUser(data => {
 			if (data?.id) {
 				this.card = data
-				console.log(this.card)
 				this.fillElements()
 				this.store.updateCard(data)
 			} else {

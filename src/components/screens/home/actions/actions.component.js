@@ -13,6 +13,8 @@ import { CardService } from '@/api/card.service'
 import styles from './actions.module.scss'
 import template from './actions.template.html'
 
+import { BALANCE_UPDATE } from '@/constants/event.constants'
+
 export class Actions extends ChildComponent {
 	constructor() {
 		super()
@@ -39,7 +41,11 @@ export class Actions extends ChildComponent {
 
 		this.cardService.updateBalance(amount, type, () => {
 			inputValue.value = ''
+			const balanceUpdatedEvent = new Event(BALANCE_UPDATE)
+			document.dispatchEvent(balanceUpdatedEvent)
 		})
+
+		$R(event.target).removeAttr('disabled').text(type)
 	}
 	render() {
 		this.element = renderService.htmlToElement(

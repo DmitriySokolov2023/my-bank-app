@@ -305,6 +305,14 @@ class RQuery {
 			return this
 		}
 	}
+	removeAttr(attributeName) {
+		if (typeof attributeName !== 'string') {
+			throw new Error('Attribute name must be a string')
+		}
+
+		this.element.removeAttribute(attributeName)
+		return this
+	}
 }
 
 /**
